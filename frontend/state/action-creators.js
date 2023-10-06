@@ -15,16 +15,16 @@ export function selectAnswer() {
   return({type: SET_SELECTED_ANSWER})
 }
 
-export function setMessage() { 
-  return({type: SET_INFO_MESSAGE})
+export function setMessage(message) { 
+  return({type: SET_INFO_MESSAGE, payload: message})
 }
 
 export function setQuiz(quizData) {
   return({type: SET_QUIZ_INTO_STATE, payload: quizData})
  }
 
-export function inputChange() { 
-  return({type: INPUT_CHANGE})
+export function inputChange(name, value) { 
+  return({type: INPUT_CHANGE, payload: { name, value }})
 }
 
 export function resetForm() { 
@@ -36,6 +36,7 @@ export function fetchQuiz() {
   return function (dispatch) {
     axios.get(`http://localhost:9000/api/quiz/next`)
     .then(res => {
+      console.log(res.data);
       dispatch({type: SET_QUIZ_INTO_STATE, payload: res.data})
     })
     .catch(err => {

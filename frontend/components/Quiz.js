@@ -6,9 +6,14 @@ const Quiz = props => {
   const {fetchQuiz, initialQuizState} = props;
 
   useEffect(() => {
+    console.log('Mounted')
     fetchQuiz();
   }, []);
 
+  const handleNewQuizClick = (e) => {
+    e.preventDefault();
+    fetchQuiz();
+  }
   console.log(initialQuizState);
   return (
     <div id="wrapper">
@@ -34,7 +39,7 @@ const Quiz = props => {
               </div>
             </div>
 
-            <button id="submitAnswerBtn">Submit answer</button>
+            <button id="submitAnswerBtn" onClick={handleNewQuizClick}>Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
