@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { fetchQuiz } from '../state/action-creators'
+import { fetchQuiz, selectAnswer } from '../state/action-creators'
 import { connect } from 'react-redux';
 
 const Quiz = props => {
-  const {fetchQuiz, initialQuizState} = props;
+  const {fetchQuiz, initialQuizState, selectAnswer, initialSelectedAnswerState} = props;
 
   useEffect(() => {
     console.log('Mounted')
@@ -14,7 +14,15 @@ const Quiz = props => {
     e.preventDefault();
     fetchQuiz();
   }
-  
+
+  const handleAnswerSelect = (answer) => {
+    //console.log(selectAnswer(answer))
+    selectAnswer(answer)
+  }
+
+
+console.log(initialSelectedAnswerState);
+
   return (
     <div id="wrapper">
       {
@@ -24,24 +32,24 @@ const Quiz = props => {
             <h2>{initialQuizState.question}</h2>
 
             <div id="quizAnswers">
-              <div className="answer selected">
+              <div className={`answer ${selectAnswer === initialQuizState.answers ? 'selected' : ''}`}>
                 {initialQuizState.answers[0].text}
-                <button>
-                  SELECTED
+                <button onClick={() => handleAnswerSelect(initialQuizState.answers[0])}>
+                {`${selectAnswer === initialQuizState.answers[0].text ? 'SELECTED' : 'select'}`}
                 </button>
               </div>
 
-              <div className="answer">
+              <div className={`answer ${selectAnswer === initialQuizState.answers[1] ? 'selected' : ''}`}>
               {initialQuizState.answers[1].text}
-                <button>
-                  Select
+                <button onClick={() => handleAnswerSelect(initialQuizState.answers[1])}>
+                {`${selectAnswer === initialQuizState.answers[1] ? 'SELECTED' : 'select'}`}
                 </button>
               </div>
             </div>
 
             <button id="submitAnswerBtn" 
             onClick={handleNewQuizClick}
-            disabled='disabled'
+            disabled={true}
             >Submit answer</button>
           </>
         ) : 'Loading next quiz...'
@@ -52,8 +60,9 @@ const Quiz = props => {
 
 const mapStateToProps = state => {
   return ({
-    initialQuizState: state.quiz
+    initialQuizState: state.quiz,
+    initialSelectedAnswerState: state.selectedAnswer
   })
 }
 
-export default connect(mapStateToProps, { fetchQuiz })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz, selectAnswer })(Quiz);
