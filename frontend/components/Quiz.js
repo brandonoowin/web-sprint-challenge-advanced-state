@@ -20,8 +20,8 @@ const Quiz = props => {
       {
         // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
         initialQuizState ? (
-          <>
-            <h2>{initialQuizState.question}</h2>
+          <> 
+            <h2>{initialQuizState.question}</h2> 
 
             <div id="quizAnswers">
               <div className="answer selected">
@@ -39,7 +39,9 @@ const Quiz = props => {
               </div>
             </div>
 
-            <button id="submitAnswerBtn" onClick={handleNewQuizClick}>Submit answer</button>
+            <button id="submitAnswerBtn" 
+            onClick={handleNewQuizClick}
+            >Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }

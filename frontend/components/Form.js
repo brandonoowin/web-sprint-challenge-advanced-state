@@ -5,6 +5,7 @@ import * as actionCreators from '../state/action-creators'
 
 export function Form(props) {
   const { resetForm, inputChange, setMessage} = props; 
+  const {newQuestion, newTrueAnswer, newFalseAnswer} = props;
 
 
   const onChange = evt => {
@@ -14,7 +15,7 @@ export function Form(props) {
 
   const onSubmit = evt => {
     evt.preventDefault();
-    const newMessage = `Congrats: "${props.newQuestion}" is a great question!`;
+    const newMessage = `Congrats: "${newQuestion}" is a great question!`;
     setMessage(newMessage)
     resetForm();
     
@@ -24,10 +25,12 @@ export function Form(props) {
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
-      <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" value={props.newQuestion}/>
-      <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" value={props.newTrueAnswer} />
-      <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" value={props.newFalseAnswer}/>
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" value={newQuestion}/>
+      <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" value={newTrueAnswer} />
+      <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" value={newFalseAnswer}/>
+      <button id="submitNewQuizBtn" 
+        disabled={newQuestion.length < 1 || newTrueAnswer.length < 1 || newFalseAnswer.length < 1}
+      >Submit new quiz</button>
     </form>
   )
 }

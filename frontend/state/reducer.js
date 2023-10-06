@@ -33,7 +33,7 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
   return state
 }
 
-const initialMessageState = 'Hello';
+const initialMessageState = '';
 function infoMessage(state = initialMessageState, action) {
   switch(action.type){
     case SET_INFO_MESSAGE: 

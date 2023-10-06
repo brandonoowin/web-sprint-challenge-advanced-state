@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { SET_INFO_MESSAGE } from '../state/action-types';
 import { setMessage } from '../state/action-creators';
 
 
