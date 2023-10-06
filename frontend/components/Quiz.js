@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { fetchQuiz } from '../state/action-creators'
+import { fetchQuiz, selectAnswer } from '../state/action-creators'
 import { connect } from 'react-redux';
 
 const Quiz = props => {
-  const {fetchQuiz, initialQuizState} = props;
+  const {fetchQuiz, initialQuizState, selectAnswer} = props;
 
   useEffect(() => {
     console.log('Mounted')
@@ -13,6 +13,11 @@ const Quiz = props => {
   const handleNewQuizClick = (e) => {
     e.preventDefault();
     fetchQuiz();
+  }
+
+  const handleSelectAnswer = (answer) => {
+    selectAnswer(answer)
+    console.log('selected', selectAnswer(answer))
   }
   console.log(initialQuizState);
   return (
@@ -25,15 +30,15 @@ const Quiz = props => {
 
             <div id="quizAnswers">
               <div className="answer selected">
-                Inset Answer 1 here
-                <button>
+                {initialQuizState.answers} Should be first answer
+                <button onClick={() => handleSelectAnswer('Insert Answer 1 Here')}>
                   SELECTED
                 </button>
               </div>
 
               <div className="answer">
-              Insert Answer 2 here
-                <button>
+              {initialQuizState.answers} Should be second answer
+                <button onClick={() => handleSelectAnswer('Insert Answer 2 Here')}>
                   Select
                 </button>
               </div>
@@ -51,8 +56,9 @@ const Quiz = props => {
 
 const mapStateToProps = state => {
   return ({
-    initialQuizState: state.quiz
+    initialQuizState: state.quiz,
+    selectedAnswer: state.selectedAnswer
   })
 }
 
-export default connect(mapStateToProps, { fetchQuiz })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz, selectAnswer })(Quiz);
