@@ -14,7 +14,7 @@ const Quiz = props => {
     e.preventDefault();
     fetchQuiz();
   }
-  console.log(initialQuizState);
+  
   return (
     <div id="wrapper">
       {
@@ -25,14 +25,14 @@ const Quiz = props => {
 
             <div id="quizAnswers">
               <div className="answer selected">
-                Inset Answer 1 here
+                {initialQuizState.answers[0].text}
                 <button>
                   SELECTED
                 </button>
               </div>
 
               <div className="answer">
-              Insert Answer 2 here
+              {initialQuizState.answers[1].text}
                 <button>
                   Select
                 </button>
