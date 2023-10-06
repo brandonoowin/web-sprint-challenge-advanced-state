@@ -1,20 +1,77 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { moveClockwise, moveCounterClockwise } from '../state/action-creators'
+import { connect } from 'react-redux';
 
-export default function Wheel(props) {
+function Wheel(props) {
+  
+  const {moveClockwise, moveCounterClockwise, initialWheelState} = props; 
+  const [activeCogIndex, setActiveCogIndex] = useState(initialWheelState);
+
+  const handleClockwiseClick = () => {
+    moveClockwise();
+    setActiveCogIndex((activeCogIndex + 1) % 6);
+    
+  }
+
+  const handleCounterClockwise = () => {
+    moveCounterClockwise();
+    setActiveCogIndex((activeCogIndex + 5) % 6);
+    
+  }
+
   return (
     <div id="wrapper">
       <div id="wheel">
-        <div className="cog active" style={{ "--i": 0 }}>B</div>
-        <div className="cog" style={{ "--i": 1 }}></div>
-        <div className="cog" style={{ "--i": 2 }}></div>
-        <div className="cog" style={{ "--i": 3 }}></div>
-        <div className="cog" style={{ "--i": 4 }}></div>
-        <div className="cog" style={{ "--i": 5 }}></div>{/* --i is a custom CSS property, no need to touch that nor the style object */}
+        <div
+          className={`cog ${activeCogIndex === 0 ? 'active' : ''}`}
+          style={{ '--i': 0 }}
+        >
+          {activeCogIndex === 0 && 'B'}
+        </div>
+        <div
+          className={`cog ${activeCogIndex === 1 ? 'active' : ''}`}
+          style={{ '--i': 1 }}
+        >
+          {activeCogIndex === 1 && 'B'}
+        </div>
+        <div
+          className={`cog ${activeCogIndex === 2 ? 'active' : ''}`}
+          style={{ '--i': 2 }}
+        >
+          {activeCogIndex === 2 && 'B'}
+        </div>
+        <div
+          className={`cog ${activeCogIndex === 3 ? 'active' : ''}`}
+          style={{ '--i': 3 }}
+        >
+          {activeCogIndex === 3 && 'B'}
+        </div>
+        <div
+          className={`cog ${activeCogIndex === 4 ? 'active' : ''}`}
+          style={{ '--i': 4 }}
+        >
+          {activeCogIndex === 4 && 'B'}
+        </div>
+        <div
+          className={`cog ${activeCogIndex === 5 ? 'active' : ''}`}
+          style={{ '--i': 5 }}
+        >
+          {activeCogIndex === 5 && 'B'}
+        </div>
       </div>
       <div id="keypad">
-        <button id="counterClockwiseBtn" >Counter clockwise</button>
-        <button id="clockwiseBtn">Clockwise</button>
+        <button id="counterClockwiseBtn" onClick={handleCounterClockwise}>Counter clockwise</button>
+        <button id="clockwiseBtn" onClick={handleClockwiseClick}>Clockwise</button>
       </div>
     </div>
   )
 }
+
+const mapStateToProps = state => {
+  return {
+    initialWheelState: state.wheel
+  }
+}
+
+
+export default connect(mapStateToProps, {moveClockwise, moveCounterClockwise})(Wheel);
