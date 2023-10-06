@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { fetchQuiz, selectAnswer } from '../state/action-creators'
+import { fetchQuiz } from '../state/action-creators'
 import { connect } from 'react-redux';
 
 const Quiz = props => {
-  const {fetchQuiz, initialQuizState, selectAnswer} = props;
+  const {fetchQuiz, initialQuizState} = props;
 
   useEffect(() => {
     console.log('Mounted')
@@ -14,31 +14,26 @@ const Quiz = props => {
     e.preventDefault();
     fetchQuiz();
   }
-
-  const handleSelectAnswer = (answer) => {
-    selectAnswer(answer)
-    console.log('selected', selectAnswer(answer))
-  }
   console.log(initialQuizState);
   return (
     <div id="wrapper">
       {
         // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
         initialQuizState ? (
-          <> 
-            <h2>{initialQuizState.question}</h2> 
+          <>
+            <h2>{initialQuizState.question}</h2>
 
             <div id="quizAnswers">
               <div className="answer selected">
-                {initialQuizState.answers} Should be first answer
-                <button onClick={() => handleSelectAnswer('Insert Answer 1 Here')}>
+                Inset Answer 1 here
+                <button>
                   SELECTED
                 </button>
               </div>
 
               <div className="answer">
-              {initialQuizState.answers} Should be second answer
-                <button onClick={() => handleSelectAnswer('Insert Answer 2 Here')}>
+              Insert Answer 2 here
+                <button>
                   Select
                 </button>
               </div>
@@ -46,6 +41,7 @@ const Quiz = props => {
 
             <button id="submitAnswerBtn" 
             onClick={handleNewQuizClick}
+            disabled='disabled'
             >Submit answer</button>
           </>
         ) : 'Loading next quiz...'
@@ -56,9 +52,8 @@ const Quiz = props => {
 
 const mapStateToProps = state => {
   return ({
-    initialQuizState: state.quiz,
-    selectedAnswer: state.selectedAnswer
+    initialQuizState: state.quiz
   })
 }
 
-export default connect(mapStateToProps, { fetchQuiz, selectAnswer })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz })(Quiz);
