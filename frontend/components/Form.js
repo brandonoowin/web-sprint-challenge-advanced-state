@@ -4,7 +4,7 @@ import * as actionCreators from '../state/action-creators'
 
 
 export function Form(props) {
-  const { resetForm, inputChange, setMessage} = props; 
+  const { resetForm, inputChange, setMessage, postQuiz} = props; 
   const {newQuestion, newTrueAnswer, newFalseAnswer} = props;
 
 
@@ -17,7 +17,17 @@ export function Form(props) {
     evt.preventDefault();
     const newMessage = `Congrats: "${newQuestion}" is a great question!`;
     setMessage(newMessage)
-    resetForm();
+    const payload = {
+      question_text: newQuestion,
+      true_answer_text: newTrueAnswer,
+      false_answer_text: newFalseAnswer,
+    };
+
+    inputChange("newQuestion", ""); // Clear the input values
+    inputChange("newTrueAnswer", "");
+    inputChange("newFalseAnswer", "");
+
+    postQuiz(payload)
     
 
   }
@@ -29,13 +39,17 @@ export function Form(props) {
       <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" value={newTrueAnswer} />
       <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" value={newFalseAnswer}/>
       <button id="submitNewQuizBtn" 
-        disabled={newQuestion.length < 1 || newTrueAnswer.length < 1 || newFalseAnswer.length < 1}
+        disabled={
+          newQuestion.trim().length < 1 ||
+          newTrueAnswer.trim().length < 1 ||
+          newFalseAnswer.trim().length < 1 }
       >Submit new quiz</button>
     </form>
   )
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return ({
     newQuestion: state.form.newQuestion,
     newTrueAnswer: state.form.newTrueAnswer, 

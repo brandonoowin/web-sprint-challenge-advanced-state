@@ -35,6 +35,8 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
   }
 }
 
+
+
 const initialMessageState = '';
 function infoMessage(state = initialMessageState, action) {
   switch(action.type){

@@ -1,68 +1,60 @@
-import React, { useEffect } from 'react'
-import { fetchQuiz, selectAnswer } from '../state/action-creators'
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { fetchQuiz, selectAnswer, postAnswer } from '../state/action-creators';
 
-const Quiz = props => {
-  const {fetchQuiz, initialQuizState, selectAnswer, initialSelectedAnswerState} = props;
-
-  useEffect(() => {
-    console.log('Mounted')
-    fetchQuiz();
-  }, []);
-
-  const handleNewQuizClick = (e) => {
-    e.preventDefault();
-    fetchQuiz();
+export function Quiz({ quiz, fetchQuiz, postAnswer, selectAnswer, selected }) {
+  if (!quiz) {
+    useEffect(() => {
+      fetchQuiz();
+    }, []);
   }
 
-  const handleAnswerSelect = (answer) => {
-    //console.log(selectAnswer(answer))
-    selectAnswer(answer)
+  const submit = () => {
+    if (selected) {
+      const answer = {
+        quiz_id: quiz.quiz_id,
+        answer_id: selected.answer_id
+      };
+      postAnswer(answer);
+    }
   }
-
-
-console.log(initialSelectedAnswerState);
 
   return (
     <div id="wrapper">
       {
         // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
-        initialQuizState ? (
+        quiz ? (
           <>
-            <h2>{initialQuizState.question}</h2>
+            <h2>{quiz.question}</h2>
 
             <div id="quizAnswers">
-              <div className={`answer ${selectAnswer === initialQuizState.answers ? 'selected' : ''}`}>
-                {initialQuizState.answers[0].text}
-                <button onClick={() => handleAnswerSelect(initialQuizState.answers[0])}>
-                {`${selectAnswer === initialQuizState.answers[0].text ? 'SELECTED' : 'select'}`}
-                </button>
-              </div>
-
-              <div className={`answer ${selectAnswer === initialQuizState.answers[1] ? 'selected' : ''}`}>
-              {initialQuizState.answers[1].text}
-                <button onClick={() => handleAnswerSelect(initialQuizState.answers[1])}>
-                {`${selectAnswer === initialQuizState.answers[1] ? 'SELECTED' : 'select'}`}
-                </button>
-              </div>
+              {quiz.answers.map((answer, idx) => {
+                return (
+                  <div className={selected === answer ? 'answer selected' : 'answer'} key={idx}>
+                    {answer.text}
+                    <button onClick={() => selectAnswer(answer)}>
+                      {selected === answer ? 'SELECTED' : 'select'}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
-            <button id="submitAnswerBtn" 
-            onClick={handleNewQuizClick}
-            disabled={true}
-            >Submit answer</button>
+            <button id="submitAnswerBtn" onClick={() => submit()} disabled={selected ? false : true}>
+              Submit answer
+            </button>
           </>
         ) : 'Loading next quiz...'
       }
     </div>
-  )
+  );
 }
 
-const mapStateToProps = state => {
-  return ({
-    initialQuizState: state.quiz,
-    initialSelectedAnswerState: state.selectedAnswer
-  })
-}
+const mapStateToProps = (state) => {
+  return {
+    quiz: state.quiz,
+    selected: state.selectedAnswer
+  };
+};
 
-export default connect(mapStateToProps, { fetchQuiz, selectAnswer })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz, selectAnswer, postAnswer })(Quiz);
