@@ -34,9 +34,10 @@ export function resetForm() {
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
+    console.log('fetiching next quiz...')
     axios.get(`http://localhost:9000/api/quiz/next`)
     .then(res => {
-      //console.log(res);
+
       dispatch({type: SET_QUIZ_INTO_STATE, payload: res.data})
     })
     .catch(err => {
@@ -61,10 +62,11 @@ export function postAnswer(answer) {
 
         dispatch({ type: SET_INFO_MESSAGE, payload: res.data.message });
         // If needed, dispatch the fetching of the next quiz here.
-        if (res.data.correct) {
+        //if (res.data.correct) {
           // If the answer is correct, fetch the next quiz
-          fetchNextQuiz(dispatch);
-        }
+
+        //}
+        dispatch(fetchQuiz());
       })
       .catch((err) => {
         console.error("Error posting answer:", err);
@@ -74,7 +76,6 @@ export function postAnswer(answer) {
 }
 
 function fetchNextQuiz(dispatch) {
-  console.log("Fetching next quiz..."); // Add this line
   axios
     .get("http://localhost:9000/api/quiz/next")
     .then((res) => {

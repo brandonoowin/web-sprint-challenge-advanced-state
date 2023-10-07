@@ -18,7 +18,8 @@ const initialQuizState = null
 function quiz(state = initialQuizState, action) {
   switch(action.type) {
     case SET_QUIZ_INTO_STATE:
-      return action.payload
+      console.log('setting quiz into state')
+      return {...state, ...action.payload}
     
     default: 
       return state;
